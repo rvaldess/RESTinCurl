@@ -1422,7 +1422,8 @@ private:
         template <typename T>
         RequestBuilder& SendData(OutDataHandler<T>& dh) {
             assert(!is_built_);
-            options_->Set(CURLOPT_READFUNCTION, dh.read_callback);
+            auto cb = dh.read_callback;
+            options_->Set(CURLOPT_READFUNCTION, cb);
             options_->Set(CURLOPT_READDATA, &dh);
             have_data_out_ = true;
             return *this;
@@ -1457,7 +1458,8 @@ private:
         template <typename T>
         RequestBuilder& StoreData(InDataHandler<T>& dh) {
             assert(!is_built_);
-            options_->Set(CURLOPT_WRITEFUNCTION, dh.write_callback);
+            auto cb = dh.write_callback;
+            options_->Set(CURLOPT_WRITEFUNCTION, cb);
             options_->Set(CURLOPT_WRITEDATA, &dh);
             have_data_in_ = true;
             return *this;
